@@ -243,3 +243,138 @@ img{
 .floating-add:active{
     transform: scale(0.9);
 }
+
+.modal{
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+}
+
+form{
+    margin-top: 20px;
+    display: flex;
+    gap: 1rem;
+}
+
+label{
+    font-family: Futura Condensed;
+    display: flex;
+    flex-direction: column;
+}
+
+.second{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal > div > p{
+    font-family: Futura;
+    font-size: 35px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+input{
+    border: none;
+    background-color: #f4f5f7;
+    border-radius: 10px;
+    height: 35px;
+    width: 300px;
+}
+input[type="file"]{
+    border-radius: 0px;
+}
+
+input::placeholder{
+    color: grey;
+    margin-left: 8px;
+}
+
+button[type="submit"]{
+    background-color: aquamarine;
+    height: 35px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    font-family: Futura Condensed;
+}
+
+button[type="submit"]:hover{
+    background-color: mediumaquamarine;
+}
+
+.first input[type="file"]{
+    display: none;
+}
+
+.first{
+    border: 2px dashed #ccc;
+    width: 230px;
+    height: 340px;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.first:hover{
+    border-color: #777;
+}
+
+.first label{
+    font-size: 16px;
+    color: #555;
+    cursor: pointer;
+}
+
+.upload-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #888;
+}
+
+input{
+    margin-top: 8px;
+}
+
+label{
+    font-size: 19px;
+    font-family: Futura Condensed;
+}
+
+svg{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+svg:hover{
+    fill: red;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.header > p{
+    margin-left: 230px;
+}
+
+select{
+    padding: 8px 16px;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    color: #333;
+    appearance: none; 
+    text-align: center;
+}

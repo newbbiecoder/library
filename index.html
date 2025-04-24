@@ -59,7 +59,7 @@
 
                             <div class="customize-buttons">
                                 <!-- EDIT -->
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pencil</title><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>
+                                <svg class="pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pencil</title><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>
 
                                 <!-- DELETE -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>delete</title><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
@@ -183,5 +183,56 @@
             </div>
         </div>
     </div>
+    <dialog class="modal">
+        <div class="header">
+            <p>Add New Book</p>
+            <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-thick</title><path d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z" /></svg>
+        </div>
+
+        <form method="dialog">
+
+            <div class="first">
+                <div class="upload-content">
+                    <div class="upload-icon">📁</div>
+                    <label><div id="uploadText">Click to upload</div></label>
+                  </div>
+                  <input type="file" id="fileInput" accept="image/*" />
+                </div>
+            </div>
+            
+            <div class="second">
+                <label for="book-name">
+                    Book Name
+                    <input type="text" name="book-name" id="book-name" placeholder="Richard">
+                </label>
+
+                <label for="book-author">
+                    Author
+                    <input type="text" name="book-author" id="book-author" placeholder="Shakesphere">
+                </label>
+
+                <label for="book-intro">
+                    Introduction
+                    <input type="text" name="book-intro" id="book-intro" placeholder="This is an awesome book...">
+                </label>
+
+                <label for="book-date">
+                    Date
+                    <input type="date" name="book-date" id="book-date">
+                </label>
+
+                <div class="status-buttons">
+                    <label for="status-buttons">Read Status: </label>
+                    <select name="status-buttons" id="read-status">
+                        <option value="read">Read</option>
+                        <option value="not-read">Not Read</option>
+                    </select>
+                </div>
+
+                <button class="submit" type="submit">Add Book</button>
+            </div>
+        </form>
+    </dialog>
+    <script src="interface.js"></script>
 </body>
 </html>
