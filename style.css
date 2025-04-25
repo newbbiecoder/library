@@ -138,6 +138,7 @@ hr{
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 .book-author{
@@ -163,6 +164,7 @@ img{
 .date{
     font-family: Futura;
     letter-spacing: 1px;
+    width: 44px;
 }
 
 .trading-in-the-zone > .date{

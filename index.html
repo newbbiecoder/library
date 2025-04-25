@@ -203,12 +203,12 @@
             <div class="second">
                 <label for="book-name">
                     Book Name
-                    <input type="text" name="book-name" id="book-name" placeholder="Richard">
+                    <input type="text" name="book-name" id="book-name" placeholder="Awesome Book" required>
                 </label>
 
                 <label for="book-author">
                     Author
-                    <input type="text" name="book-author" id="book-author" placeholder="Shakesphere">
+                    <input type="text" name="book-author" id="book-author" placeholder="Shakesphere" required>
                 </label>
 
                 <label for="book-intro">
@@ -218,7 +218,7 @@
 
                 <label for="book-date">
                     Date
-                    <input type="date" name="book-date" id="book-date">
+                    <input type="text" name="book-date" id="book-date" pattern="\d{1,2}\.\d{1,2}\.\d{2}" placeholder="dd.m.yy" required>
                 </label>
 
                 <div class="status-buttons">
