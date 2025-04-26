@@ -7,6 +7,7 @@ const close = document.querySelector('.close');
 const main_content = document.querySelector('.main-content')
 const books_container = document.querySelector('.books-container');
 
+const edit_modal = document.querySelector('.edit-modal');
 
 function Book(date, image, name, author, content, status){
     this.date = date;
@@ -19,20 +20,29 @@ function Book(date, image, name, author, content, status){
 }
 
 function addBookToLibrary(date, image, name, author, content, status){
-    const atomic_habits = new Book(date, image, name, author, content, status);
-    myLibrary.push(atomic_habits);
+    const new_book = new Book(date, image, name, author, content, status);
+    myLibrary.push(new_book);
 }
 
 
 let books = document.querySelectorAll('.book');
 let book = document.querySelector('.book');
 
-let book_name = document.getElementById('book-name');
-let book_author = document.getElementById('book-author');
-let book_intro = document.getElementById('book-intro')
-let book_date = document.getElementById('book-date');
-let status_button = document.querySelector('#read-status');
-let book_image = book.querySelector('.book-image > img')
+// DIALOG 
+let dialog_book_name = document.getElementById('book-name');
+let dialog_book_author = document.getElementById('book-author');
+let dialog_book_intro = document.getElementById('book-intro')
+let dialog_book_date = document.getElementById('book-date');
+let dialog_status_button = document.querySelector('#read-status');
+let dialog_book_image = book.querySelector('#fileInput')
+
+// DOM PAGE
+let date = book.querySelector('.date');
+let book_image = book.querySelector('.book-image > img[src]');
+let title = book.querySelector('.title');
+let book_author = book.querySelector('.book-author');
+let intro = book.querySelector('.intro');
+let status_buttons = book.querySelector('.status-buttons > button');
 
 books.forEach((book) => {
     let date = book.querySelector('.date');
@@ -77,7 +87,7 @@ function displayBooks(){
     })
 
     submit.addEventListener('click', () => {
-        const date = book_date.value;
+        const date = dialog_book_date.value;
         const datePattern = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
         const file = fileInput.files[0];
     
@@ -94,7 +104,7 @@ function displayBooks(){
         reader.onload = function (e) {
             const imageDataURL = e.target.result;
     
-            addBookToLibrary(book_date.value, imageDataURL, book_name.value, book_author.value, book_intro.value, status_button.value);
+            addBookToLibrary(dialog_book_date.value, imageDataURL, dialog_book_name.value, dialog_book_author.value, dialog_book_intro.value, dialog_status_button.value);
     
             const hr = document.createElement('hr');
             books_container.appendChild(hr);
@@ -104,7 +114,7 @@ function displayBooks(){
             books_container.appendChild(book_div);
     
             const new_book_date = document.createElement('div');
-            new_book_date.innerHTML = book_date.value;
+            new_book_date.innerHTML = dialog_book_date.value;
             new_book_date.classList.add('date');
             book_div.appendChild(new_book_date);
     
@@ -122,17 +132,17 @@ function displayBooks(){
             book_div.appendChild(new_book_info);
     
             const new_book_title = document.createElement('div');
-            new_book_title.innerHTML = book_name.value;
+            new_book_title.innerHTML = dialog_book_name.value;
             new_book_title.classList.add('title');
             new_book_info.appendChild(new_book_title);
     
             const new_book_author = document.createElement('div');
-            new_book_author.innerHTML = book_author.value;
+            new_book_author.innerHTML = dialog_book_author.value;
             new_book_author.classList.add('book-author');
             new_book_info.appendChild(new_book_author);
     
             const new_book_intro = document.createElement('div');
-            new_book_intro.innerHTML = book_intro.value;
+            new_book_intro.innerHTML = dialog_book_intro.value;
             new_book_intro.classList.add('intro');
             new_book_info.appendChild(new_book_intro);
     
@@ -144,7 +154,7 @@ function displayBooks(){
             new_book_status_buttons.classList.add('status-buttons');
             new_book_buttons.appendChild(new_book_status_buttons);
     
-            if(status_button.value == 'read'){
+            if(dialog_status_button.value == 'read'){
                 const new_read_button = document.createElement('button');
                 new_read_button.classList.add('read');
                 new_read_button.innerHTML = "Read";
@@ -164,13 +174,13 @@ function displayBooks(){
     
             modal.close();
     
-            book_date.value = '';
+            dialog_book_date.value = '';
             uploadIcon.innerHTML = '📁';
             uploadText.innerHTML = 'Click to upload';
             fileInput.value = '';
-            book_name.value = '';
-            book_author.value = '';
-            book_intro.value = '';
+            dialog_book_name.value = '';
+            dialog_book_author.value = '';
+            dialog_book_intro.value = '';
         };
     
         reader.readAsDataURL(file);
@@ -178,3 +188,127 @@ function displayBooks(){
 }
 
 displayBooks()
+
+const edit_icon = document.querySelectorAll('.customize-buttons svg:first-child');
+const delete_icon = document.querySelectorAll('.customize-buttons svg:nth-child(2)');
+
+// Edit Modal
+edit_icon.forEach((edit) => {
+
+    let status_buttons = book.querySelector('.status-buttons > button');
+    let edit_dialog_book_name = document.querySelector('.edit-modal form .second label #book-name');
+    let edit_dialog_book_author = document.querySelector('.edit-modal form .second label #book-author');
+    let edit_dialog_book_intro = document.querySelector('.edit-modal form .second label #book-intro')
+    let edit_dialog_book_date = document.querySelector('.edit-modal form .second label #book-date');
+    let edit_dialog_book_image = document.querySelector('.edit-modal form .first #fileInput');
+    let edit_dialog_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:first-child');
+    let edit_dialog_not_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:nth-child(2)');
+
+    const edit_modal_close = document.querySelector('.edit-modal .header svg')
+
+    edit_modal_close.addEventListener('click', () => {
+        edit_modal.close();
+    })
+
+    edit.addEventListener('click', () => {
+        const uploadText = document.querySelector('.edit-modal form .first .upload-content #uploadText');
+        let updatedImage = null;
+        uploadText.textContent = "Click to upload";
+
+        const book = edit.closest('.book');
+        const date = book.querySelector('.date');
+        const book_image = book.querySelector('.book-image img');
+        const title = book.querySelector('.title');
+        const book_author = book.querySelector('.book-author');
+        const intro = book.querySelector('.intro');
+        const status_button = book.querySelector('.status-buttons');
+        const read_button = status_button.querySelector('.status-buttons > .read');
+        const not_read_button = status_button.querySelector('.status-buttons > .not-read');
+
+        edit_modal.showModal();
+
+        edit_dialog_book_name.value = title.innerHTML ;
+        edit_dialog_book_author.value = book_author.innerHTML;
+        edit_dialog_book_intro.value = intro.innerHTML;
+        edit_dialog_book_date.value = date.innerHTML;
+
+        if (read_button) {
+            edit_dialog_read_button.selected = true;
+        } else if (not_read_button) {
+            edit_dialog_not_read_button.selected = true;
+        }
+        document.querySelector('.edit-modal form .first').addEventListener('click', () => {
+            document.querySelector('.edit-modal form .first #fileInput').click();
+        });
+
+        
+        updatedImage = null;
+        edit_dialog_book_image.addEventListener('change', function() {
+            const file = this.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    updatedImage = e.target.result;
+                    uploadText.textContent = "✅ Image updated!";
+                };
+                reader.readAsDataURL(file);
+            }
+        })
+
+        const submit_edit_book = document.querySelector('.edit-modal .second button');
+        submit_edit_book.onclick = () => {
+
+            const datePattern = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
+
+            if (!datePattern.test(edit_dialog_book_date.value)) {
+                alert("Please enter the date in the format dd.m.yy (e.g., 29.3.25)");
+                return;
+            }
+            title.innerHTML = edit_dialog_book_name.value;
+            book_author.innerHTML = edit_dialog_book_author.value;
+            intro.innerHTML = edit_dialog_book_intro.value;
+            date.innerHTML = edit_dialog_book_date.value;
+            book_image.innerHTML = edit_dialog_book_image.value;
+            
+            if(updatedImage){
+                book_image.src = updatedImage;
+            }
+            if(edit_dialog_read_button.selected){
+                if(!status_button.contains(read_button)){
+                    const new_read = document.createElement('button');
+                    new_read.classList.add('read');
+                    new_read.innerHTML = 'Read';
+                    status_button.innerHTML = '';
+                    status_button.appendChild(new_read);
+                }             
+            }
+            else{
+                if(!status_button.contains(not_read_button)){
+                    const not_new_read = document.createElement('button');
+                    not_new_read.classList.add('not-read');
+                    not_new_read.innerHTML = 'Not Read';
+                    status_button.innerHTML = '';
+                    status_button.appendChild(not_new_read);
+                }
+            }
+        }
+    });
+
+});
+
+delete_icon.forEach((deletes) => {
+    deletes.addEventListener('click', () => {
+        let book = document.querySelector('.book');
+        let numberOfDiv = document.getElementsByClassName('book');
+        console.log(numberOfDiv.length);
+        if(numberOfDiv.length == 1){
+            alert("ATLEAST READ ONE BOOK WTF");
+        }
+        else{
+            const hr = book.nextElementSibling;
+            hr.remove();
+            book.remove();
+        }
+        
+    })
+})

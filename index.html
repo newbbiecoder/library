@@ -41,7 +41,6 @@
 
             <div class="books-container">
                 <div class="recently">RECENTLY</div>
-
                 <div class="book atomic-habits">
                     <div class="date">12.4.25</div>
                     <div class="book-image">
@@ -65,9 +64,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>delete</title><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
                             </div>
                         </div>
-                    </div>
-
-                    
+                    </div>                
                 </div>
 
                 <hr>
@@ -213,7 +210,7 @@
 
                 <label for="book-intro">
                     Introduction
-                    <input type="text" name="book-intro" id="book-intro" placeholder="This is an awesome book...">
+                    <textarea name="book-intro" id="book-intro" placeholder="This is an awesome book..." rows="10"></textarea>
                 </label>
 
                 <label for="book-date">
@@ -230,6 +227,57 @@
                 </div>
 
                 <button class="submit" type="submit">Add Book</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="edit-modal">
+        <div class="header">
+            <p>Edit Book</p>
+            <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-thick</title><path d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z" /></svg>
+        </div>
+
+        <form method="dialog">
+
+            <div class="first">
+                <div class="upload-content">
+                    <div class="upload-icon">📁</div>
+                    <label><div id="uploadText">Click to upload</div></label>
+                  </div>
+                  <input type="file" id="fileInput" accept="image/*" />
+                </div>
+            </div>
+            
+            <div class="second">
+                <label for="book-name">
+                    Book Name
+                    <input type="text" name="book-name" id="book-name" placeholder="Awesome Book" required>
+                </label>
+
+                <label for="book-author">
+                    Author
+                    <input type="text" name="book-author" id="book-author" placeholder="Shakesphere" required>
+                </label>
+
+                <label for="book-intro">
+                    Introduction
+                    <textarea name="book-intro" id="book-intro" placeholder="This is an awesome book..." rows="10"></textarea>
+                </label>
+
+                <label for="book-date">
+                    Date
+                    <input type="text" name="book-date" id="book-date" pattern="\d{1,2}\.\d{1,2}\.\d{2}" placeholder="dd.m.yy" required>
+                </label>
+
+                <div class="status-buttons">
+                    <label for="status-buttons">Read Status: </label>
+                    <select name="status-buttons" id="read-status">
+                        <option value="read">Read</option>
+                        <option value="not-read">Not Read</option>
+                    </select>
+                </div>
+
+                <button class="submit" type="submit">Edit Book</button>
             </div>
         </form>
     </dialog>
