@@ -9,22 +9,6 @@ const books_container = document.querySelector('.books-container');
 
 const edit_modal = document.querySelector('.edit-modal');
 
-function Book(date, image, name, author, content, status){
-    this.date = date;
-    this.image = image;
-    this.name = name;
-    this.author = author;
-    this.content = content;
-    this.status = status;
-    this.id = crypto.randomUUID();;
-}
-
-function addBookToLibrary(date, image, name, author, content, status){
-    const new_book = new Book(date, image, name, author, content, status);
-    myLibrary.push(new_book);
-}
-
-
 let books = document.querySelectorAll('.book');
 let book = document.querySelector('.book');
 
@@ -44,6 +28,134 @@ let book_author = book.querySelector('.book-author');
 let intro = book.querySelector('.intro');
 let status_buttons = book.querySelector('.status-buttons > button');
 
+
+class Book{
+    constructor(date, image, name, author, content, status){
+        this.date = date;
+        this.image = image;
+        this.name = name;
+        this.author = author;
+        this.content = content;
+        this.status = status;
+        this.id = crypto.randomUUID();
+    }
+    addBookToLibrary(date, image, name, author, content, status){
+        const new_book = new Book(date, image, name, author, content, status);
+        myLibrary.push(new_book);
+    }
+    displayBooks(){
+        add_button.addEventListener('click', () => {
+            if(modal.style.display == 'none'){
+                modal.style.display = 'block';
+            }
+            modal.showModal();
+        })
+
+        submit.addEventListener('click', () => {
+            const date = dialog_book_date.value;
+            const datePattern = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
+            const file = fileInput.files[0];
+        
+            if (!file) {
+                alert("Please upload an image.");
+                return;
+            }
+
+            if (!datePattern.test(date)) {
+                alert("Please enter the date in the format dd.m.yy (e.g., 29.3.25)");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageDataURL = e.target.result;
+        
+                this.addBookToLibrary(dialog_book_date.value, imageDataURL, dialog_book_name.value, dialog_book_author.value, dialog_book_intro.value, dialog_status_button.value);
+        
+                const hr = document.createElement('hr');
+                books_container.appendChild(hr);
+        
+                const book_div = document.createElement('div');
+                book_div.classList.add('book');
+                books_container.appendChild(book_div);
+        
+                const new_book_date = document.createElement('div');
+                new_book_date.innerHTML = dialog_book_date.value;
+                new_book_date.classList.add('date');
+                book_div.appendChild(new_book_date);
+        
+                const new_book_image = document.createElement('div');
+                new_book_image.classList.add('book-image');
+                const new_image = document.createElement('img');
+                new_image.src = imageDataURL; 
+                new_image.width = 120;
+                new_image.height = 200;
+                book_div.appendChild(new_book_image);
+                new_book_image.appendChild(new_image);
+        
+                const new_book_info = document.createElement('div');
+                new_book_info.classList.add('info');
+                book_div.appendChild(new_book_info);
+        
+                const new_book_title = document.createElement('div');
+                new_book_title.innerHTML = dialog_book_name.value;
+                new_book_title.classList.add('title');
+                new_book_info.appendChild(new_book_title);
+        
+                const new_book_author = document.createElement('div');
+                new_book_author.innerHTML = dialog_book_author.value;
+                new_book_author.classList.add('book-author');
+                new_book_info.appendChild(new_book_author);
+        
+                const new_book_intro = document.createElement('div');
+                new_book_intro.innerHTML = dialog_book_intro.value;
+                new_book_intro.classList.add('intro');
+                new_book_info.appendChild(new_book_intro);
+        
+                const new_book_buttons = document.createElement('div');
+                new_book_buttons.classList.add('buttons');
+                new_book_info.appendChild(new_book_buttons);
+        
+                const new_book_status_buttons = document.createElement('div');
+                new_book_status_buttons.classList.add('status-buttons');
+                new_book_buttons.appendChild(new_book_status_buttons);
+        
+                if(dialog_status_button.value == 'read'){
+                    const new_read_button = document.createElement('button');
+                    new_read_button.classList.add('read');
+                    new_read_button.innerHTML = "Read";
+                    new_book_status_buttons.appendChild(new_read_button);
+                } else {
+                    const new_not_read_button = document.createElement('button');
+                    new_not_read_button.classList.add('not-read');
+                    new_not_read_button.innerHTML = "Not Read";
+                    new_book_status_buttons.appendChild(new_not_read_button);
+                }
+        
+                const customize_buttons = document.querySelector('.customize-buttons')
+                const new_customizable_buttons = document.createElement('div');
+                new_customizable_buttons.classList.add('customize-buttons');
+                new_customizable_buttons.innerHTML = customize_buttons.innerHTML;
+                new_book_buttons.appendChild(new_customizable_buttons)
+        
+                modal.close();
+        
+                dialog_book_date.value = '';
+                uploadIcon.innerHTML = '📁';
+                uploadText.innerHTML = 'Click to upload';
+                fileInput.value = '';
+                dialog_book_name.value = '';
+                dialog_book_author.value = '';
+                dialog_book_intro.value = '';
+            };
+        
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+let newBook = new Book();
+newBook.displayBooks();
+
 books.forEach((book) => {
     let date = book.querySelector('.date');
     let book_image = book.querySelector('.book-image > img');
@@ -52,7 +164,7 @@ books.forEach((book) => {
     let intro = book.querySelector('.intro');
     let status_buttons = book.querySelector('.status-buttons > button');
 
-    addBookToLibrary(date.innerHTML, book_image.innerHTML, title.innerHTML, book_author.innerHTML, intro.innerHTML, status_buttons.innerHTML);
+    newBook.addBookToLibrary(date.innerHTML, book_image.innerHTML, title.innerHTML, book_author.innerHTML, intro.innerHTML, status_buttons.innerHTML);
 })
 
 console.log(myLibrary);
@@ -77,140 +189,45 @@ fileInput.addEventListener('change', function () {
     }
 });
 
-function displayBooks(){
+// Edit & Delete Modal
+books_container.addEventListener('click', (e) => { 
 
-    add_button.addEventListener('click', () => {
-        if(modal.style.display == 'none'){
-            modal.style.display = 'block';
+    const svg = e.target.closest('svg');
+
+    if(!svg) return;
+
+    const book = svg.closest('.book');
+    const allBooks = document.querySelectorAll('.book');
+
+    // Delete button
+    if (svg.matches('.customize-buttons svg:nth-child(2)')) {
+        const hr = book.nextElementSibling;
+
+        if (allBooks.length === 1) {
+            alert("ATLEAST READ ONE BOOK WTF");
+        } else {
+            if (hr && hr.tagName === 'HR') hr.remove();
+            book.remove();
         }
-        modal.showModal();
-    })
+    }
+    // Edit button
+    else if(svg.matches('.customize-buttons svg:first-child')){
+        const edit = e.target;
 
-    submit.addEventListener('click', () => {
-        const date = dialog_book_date.value;
-        const datePattern = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
-        const file = fileInput.files[0];
-    
-        if (!file) {
-            alert("Please upload an image.");
-            return;
-        }
+        let edit_dialog_book_name = document.querySelector('.edit-modal form .second label #book-name');
+        let edit_dialog_book_author = document.querySelector('.edit-modal form .second label #book-author');
+        let edit_dialog_book_intro = document.querySelector('.edit-modal form .second label #book-intro')
+        let edit_dialog_book_date = document.querySelector('.edit-modal form .second label #book-date');
+        let edit_dialog_book_image = document.querySelector('.edit-modal form .first #fileInput');
+        let edit_dialog_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:first-child');
+        let edit_dialog_not_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:nth-child(2)');
 
-        if (!datePattern.test(date)) {
-            alert("Please enter the date in the format dd.m.yy (e.g., 29.3.25)");
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const imageDataURL = e.target.result;
-    
-            addBookToLibrary(dialog_book_date.value, imageDataURL, dialog_book_name.value, dialog_book_author.value, dialog_book_intro.value, dialog_status_button.value);
-    
-            const hr = document.createElement('hr');
-            books_container.appendChild(hr);
-    
-            const book_div = document.createElement('div');
-            book_div.classList.add('book');
-            books_container.appendChild(book_div);
-    
-            const new_book_date = document.createElement('div');
-            new_book_date.innerHTML = dialog_book_date.value;
-            new_book_date.classList.add('date');
-            book_div.appendChild(new_book_date);
-    
-            const new_book_image = document.createElement('div');
-            new_book_image.classList.add('book-image');
-            const new_image = document.createElement('img');
-            new_image.src = imageDataURL; 
-            new_image.width = 120;
-            new_image.height = 200;
-            book_div.appendChild(new_book_image);
-            new_book_image.appendChild(new_image);
-    
-            const new_book_info = document.createElement('div');
-            new_book_info.classList.add('info');
-            book_div.appendChild(new_book_info);
-    
-            const new_book_title = document.createElement('div');
-            new_book_title.innerHTML = dialog_book_name.value;
-            new_book_title.classList.add('title');
-            new_book_info.appendChild(new_book_title);
-    
-            const new_book_author = document.createElement('div');
-            new_book_author.innerHTML = dialog_book_author.value;
-            new_book_author.classList.add('book-author');
-            new_book_info.appendChild(new_book_author);
-    
-            const new_book_intro = document.createElement('div');
-            new_book_intro.innerHTML = dialog_book_intro.value;
-            new_book_intro.classList.add('intro');
-            new_book_info.appendChild(new_book_intro);
-    
-            const new_book_buttons = document.createElement('div');
-            new_book_buttons.classList.add('buttons');
-            new_book_info.appendChild(new_book_buttons);
-    
-            const new_book_status_buttons = document.createElement('div');
-            new_book_status_buttons.classList.add('status-buttons');
-            new_book_buttons.appendChild(new_book_status_buttons);
-    
-            if(dialog_status_button.value == 'read'){
-                const new_read_button = document.createElement('button');
-                new_read_button.classList.add('read');
-                new_read_button.innerHTML = "Read";
-                new_book_status_buttons.appendChild(new_read_button);
-            } else {
-                const new_not_read_button = document.createElement('button');
-                new_not_read_button.classList.add('not-read');
-                new_not_read_button.innerHTML = "Not Read";
-                new_book_status_buttons.appendChild(new_not_read_button);
-            }
-    
-            const customize_buttons = document.querySelector('.customize-buttons')
-            const new_customizable_buttons = document.createElement('div');
-            new_customizable_buttons.classList.add('customize-buttons');
-            new_customizable_buttons.innerHTML = customize_buttons.innerHTML;
-            new_book_buttons.appendChild(new_customizable_buttons)
-    
-            modal.close();
-    
-            dialog_book_date.value = '';
-            uploadIcon.innerHTML = '📁';
-            uploadText.innerHTML = 'Click to upload';
-            fileInput.value = '';
-            dialog_book_name.value = '';
-            dialog_book_author.value = '';
-            dialog_book_intro.value = '';
-        };
-    
-        reader.readAsDataURL(file);
-    });
-}
+        const edit_modal_close = document.querySelector('.edit-modal .header svg')
 
-displayBooks()
-
-const edit_icon = document.querySelectorAll('.customize-buttons svg:first-child');
-const delete_icon = document.querySelectorAll('.customize-buttons svg:nth-child(2)');
-
-// Edit Modal
-edit_icon.forEach((edit) => {
-
-    let status_buttons = book.querySelector('.status-buttons > button');
-    let edit_dialog_book_name = document.querySelector('.edit-modal form .second label #book-name');
-    let edit_dialog_book_author = document.querySelector('.edit-modal form .second label #book-author');
-    let edit_dialog_book_intro = document.querySelector('.edit-modal form .second label #book-intro')
-    let edit_dialog_book_date = document.querySelector('.edit-modal form .second label #book-date');
-    let edit_dialog_book_image = document.querySelector('.edit-modal form .first #fileInput');
-    let edit_dialog_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:first-child');
-    let edit_dialog_not_read_button = document.querySelector('.edit-modal form .second .status-buttons select option:nth-child(2)');
-
-    const edit_modal_close = document.querySelector('.edit-modal .header svg')
-
-    edit_modal_close.addEventListener('click', () => {
-        edit_modal.close();
-    })
-
-    edit.addEventListener('click', () => {
+        edit_modal_close.addEventListener('click', () => {
+            edit_modal.close();
+        })
+        
         const uploadText = document.querySelector('.edit-modal form .first .upload-content #uploadText');
         let updatedImage = null;
         uploadText.textContent = "Click to upload";
@@ -292,23 +309,5 @@ edit_icon.forEach((edit) => {
                 }
             }
         }
-    });
-
+    }
 });
-
-delete_icon.forEach((deletes) => {
-    deletes.addEventListener('click', () => {
-        let book = document.querySelector('.book');
-        let numberOfDiv = document.getElementsByClassName('book');
-        console.log(numberOfDiv.length);
-        if(numberOfDiv.length == 1){
-            alert("ATLEAST READ ONE BOOK WTF");
-        }
-        else{
-            const hr = book.nextElementSibling;
-            hr.remove();
-            book.remove();
-        }
-        
-    })
-})
