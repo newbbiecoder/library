@@ -18,7 +18,7 @@ let dialog_book_author = document.getElementById('book-author');
 let dialog_book_intro = document.getElementById('book-intro')
 let dialog_book_date = document.getElementById('book-date');
 let dialog_status_button = document.querySelector('#read-status');
-let dialog_book_image = book.querySelector('#fileInput')
+let dialog_book_image = book.querySelector('#fileInput');
 
 // DOM PAGE
 let date = book.querySelector('.date');
@@ -27,6 +27,83 @@ let title = book.querySelector('.title');
 let book_author = book.querySelector('.book-author');
 let intro = book.querySelector('.intro');
 let status_buttons = book.querySelector('.status-buttons > button');
+
+let formModal = document.querySelector('.modal form');
+
+let errorName = document.querySelector('.errorName');
+let errorAuthor = document.querySelector('.errorAuthor');
+let errorIntro = document.querySelector('.errorIntro');
+let errorDate = document.querySelector('.errorDate');
+
+// FORM VALIDATION
+
+dialog_book_name.addEventListener("input", (event) => {
+    if(dialog_book_name.validity.valid){
+        errorName.textContent = "";
+        errorName.classList = "error";
+    }
+})
+
+dialog_book_author.addEventListener("input", (event) => {
+    if(dialog_book_author.validity.valid){
+        errorAuthor.textContent = "";
+        errorAuthor.classList = "error";
+    }
+})
+
+dialog_book_intro.addEventListener("input", (event) => {
+    if(dialog_book_intro.validity.valid){
+        errorIntro.textContent = "";
+        errorIntro.classList = "error";
+    }
+})
+
+const datePattern = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
+
+dialog_book_date.addEventListener("input", (event) => {
+    if(dialog_book_date.validity.valid){
+        errorDate.textContent = "";
+        errorDate.classList = "error";
+    }  
+})
+
+formModal.addEventListener('submit', (event) => {
+    if(!dialog_book_name.validity.valid){
+        showError();
+
+        event.preventDefault();
+    }
+    if(!dialog_book_author.validity.valid){
+        showError();
+
+        event.preventDefault();
+    }
+    if(!dialog_book_intro.validity.valid){
+        showError();
+
+        event.preventDefault();
+    }
+    if(!dialog_book_date.validity.valid){
+        showError();
+
+        event.preventDefault();
+    }
+})
+
+function showError(){
+    if(dialog_book_name.validity.valueMissing){
+        errorName.textContent = "Book name is required, darling!";
+    }
+    if(dialog_book_author.validity.valueMissing){
+        errorAuthor.textContent = "Book author is required, darling!";
+    }
+    if(dialog_book_intro.validity.valueMissing){
+        errorIntro.textContent = "Intro is required, darling!";
+    }
+    if(dialog_book_date.validity.valueMissing){
+        errorDate.textContent = "Enter date in required format: dd.m.yy (e.g., 29.3.25)";
+    }
+}
 
 
 class Book{
@@ -65,12 +142,14 @@ class Book{
                 alert("Please enter the date in the format dd.m.yy (e.g., 29.3.25)");
                 return;
             }
+            
             const reader = new FileReader();
             reader.onload = (e) => {
+                console.log("HELLO WTF")
                 const imageDataURL = e.target.result;
         
                 this.addBookToLibrary(dialog_book_date.value, imageDataURL, dialog_book_name.value, dialog_book_author.value, dialog_book_intro.value, dialog_status_button.value);
-        
+
                 const hr = document.createElement('hr');
                 books_container.appendChild(hr);
         

@@ -186,7 +186,7 @@
             <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-thick</title><path d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z" /></svg>
         </div>
 
-        <form method="dialog">
+        <form method="dialog" novalidate>
 
             <div class="first">
                 <div class="upload-content">
@@ -201,21 +201,25 @@
                 <label for="book-name">
                     Book Name
                     <input type="text" name="book-name" id="book-name" placeholder="Awesome Book" required>
+                    <span class="errorName"></span>
                 </label>
 
                 <label for="book-author">
                     Author
                     <input type="text" name="book-author" id="book-author" placeholder="Shakesphere" required>
+                    <span class="errorAuthor"></span>
                 </label>
 
                 <label for="book-intro">
                     Introduction
-                    <textarea name="book-intro" id="book-intro" placeholder="This is an awesome book..." rows="10"></textarea>
+                    <textarea name="book-intro" id="book-intro" placeholder="This is an awesome book..." rows="10" required></textarea>
+                    <span class="errorIntro"></span>
                 </label>
 
                 <label for="book-date">
                     Date
                     <input type="text" name="book-date" id="book-date" pattern="\d{1,2}\.\d{1,2}\.\d{2}" placeholder="dd.m.yy" required>
+                    <span class="errorDate"></span>
                 </label>
 
                 <div class="status-buttons">

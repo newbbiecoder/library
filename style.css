@@ -353,6 +353,31 @@ input{
     margin-top: 8px;
 }
 
+input:invalid, textarea:invalid {
+  border-color: #900;
+  background-color: #fdd;
+}
+
+input:focus:invalid {
+  outline: none;
+}
+
+.errorName, .errorAuthor, .errorIntro, .errorDate {
+  width: 100%;
+  padding: 0;
+
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
+
 label{
     font-size: 19px;
     font-family: Futura Condensed;
